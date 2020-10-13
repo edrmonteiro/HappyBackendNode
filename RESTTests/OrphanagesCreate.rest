@@ -1,0 +1,13 @@
+//Create orphanage
+POST http://localhost:3333/orphanages/ 
+content-type: application/json
+
+{
+    "name": "Lar das crianças",
+    "latitude": "-23.4963243",
+    "longitude": "-46.6223594",
+    "about": "orphanage for children",
+    "instructions": "see instructions",
+    "opening_hours": "from 8am to 7pm",
+    "open_on_weekends": "true"
+}

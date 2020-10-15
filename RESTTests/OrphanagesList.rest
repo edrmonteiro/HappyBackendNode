@@ -1,3 +1,0 @@
-//list orphanage
-GET http://localhost:3333/orphanages/ 
-content-type: application/json

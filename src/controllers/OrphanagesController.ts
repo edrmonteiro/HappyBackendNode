@@ -4,6 +4,8 @@ import { ReadStream } from 'typeorm/platform/PlatformTools';
 import Orphanage from '../models/Orphanage';
 import orphanageView from '../views/orphanages_view'
 import * as Yup from 'yup'
+import path from 'path';
+import fs from 'fs';
 
 export default {
     async index(request: Request, response:Response){
@@ -39,6 +41,7 @@ export default {
         const images = requestImages.map(image => {
             return { path: image.filename}
         })
+        //console.log(images);
         const data = {
             name,
             latitude,
@@ -63,10 +66,18 @@ export default {
                 })
             )
         });
-
-        await schema.validate(data, {
-            abortEarly:false,
-        });
+        try{
+            await schema.validate(data, {
+                abortEarly:false,
+                
+            });
+        }catch(err) {
+            images.forEach(async ({ path: file}) => {
+                const filePath = path.join(__dirname, '..', '..', 'uploads', file)
+                await fs.promises.unlink(filePath)
+            })
+            throw err
+        }
         const orphanage = orphanagesRepository.create(data);
         console.log(data);
         await orphanagesRepository.save(orphanage);
